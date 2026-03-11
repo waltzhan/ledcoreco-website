@@ -32,9 +32,69 @@
       "plccLed": "PLCC LED",
       "irSensor": "مستشعرات IR",
       "uvLed": "UV LED"
+    },
+    "viewDetails": "عرض التفاصيل",
+    "allProducts": "جميع المنتجات",
+    "categoriesTitle": "الفئات",
+    "noProducts": "لا توجد منتجات",
+    "targetMarkets": "الأسواق المستهدفة",
+    "specifications": "المواصفات",
+    "features": "الميزات",
+    "applications": "التطبيقات",
+    "downloadDatasheet": "تحميل ورقة البيانات",
+    "productNotFound": "المنتج غير موجود",
+    "backToProducts": "العودة للمنتجات",
+    "model": "الطراز"
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "هل لديك احتياجات من منتجات LED؟ يرجى ملء النموذج أدناه وسنتواصل معك قريباً.",
+    "companyName": "اسم الشركة",
+    "contactName": "اسم جهة الاتصال",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "country": "البلد/المنطقة",
+    "products": "المنتجات المطلوبة",
+    "quantity": "الكمية المقدرة",
+    "message": "المتطلبات التفصيلية",
+    "submit": "إرسال الطلب",
+    "required": "مطلوب",
+    "contactInfo": "معلومات الاتصال",
+    "address": "عنوان الشركة",
+    "selectCountry": "اختر البلد/المنطقة",
+    "selectQuantity": "اختر نطاق الكمية",
+    "placeholder": {
+      "email": "example@company.com",
+      "phone": "+966 123 456 789",
+      "message": "يرجى وصف متطلباتك المحددة، مثل سيناريوهات التطبيق، المتطلبات التقنية، وقت التسليم، إلخ."
+    },
+    "quantityOptions": {
+      "1k-10k": "1,000 - 10,000 قطعة",
+      "10k-50k": "10,000 - 50,000 قطعة",
+      "50k-100k": "50,000 - 100,000 قطعة",
+      "100k+": "100,000+ قطعة"
     }
   },
   "footer": {
-    "copyright": "© 2024 شيامن غوانبو إلكترونيات المحدودة. جميع الحقوق محفوظة."
+    "copyright": "© 2024 شيامن غوانبو إلكترونيات المحدودة. جميع الحقوق محفوظة.",
+    "quickLinks": "روابط سريعة",
+    "contactUs": "اتصل بنا",
+    "address": "العنوان",
+    "email": "البريد الإلكتروني",
+    "followUs": "تابعنا",
+    "certifications": "الشهادات"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "open": "فتح",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "new": "جديد",
+    "popular": "شائع",
+    "learnMore": "معرفة المزيد"
   }
 }

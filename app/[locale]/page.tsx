@@ -131,7 +131,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     <span className="text-gray-400">Product Image</span>
                   </div>
                   <button className="w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800 transition">
-                    View Products
+                    {t('products.viewDetails')}
                   </button>
                 </div>
               ))}

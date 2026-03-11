@@ -32,9 +32,69 @@
       "plccLed": "PLCC LED",
       "irSensor": "เซ็นเซอร์ IR",
       "uvLed": "UV LED"
+    },
+    "viewDetails": "ดูรายละเอียด",
+    "allProducts": "สินค้าทั้งหมด",
+    "categoriesTitle": "หมวดหมู่",
+    "noProducts": "ไม่มีสินค้า",
+    "targetMarkets": "ตลาดเป้าหมาย",
+    "specifications": "สเปค",
+    "features": "คุณสมบัติ",
+    "applications": "การใช้งาน",
+    "downloadDatasheet": "ดาวน์โหลด Datasheet",
+    "productNotFound": "ไม่พบสินค้า",
+    "backToProducts": "กลับไปหน้าสินค้า",
+    "model": "รุ่น"
+  },
+  "contact": {
+    "title": "ติดต่อเรา",
+    "subtitle": "มีความต้องการผลิตภัณฑ์ LED หรือไม่? กรุณากรอกแบบฟอร์มด้านล่าง เราจะติดต่อกลับโดยเร็ว",
+    "companyName": "ชื่อบริษัท",
+    "contactName": "ชื่อผู้ติดต่อ",
+    "email": "อีเมล",
+    "phone": "หมายเลขโทรศัพท์",
+    "country": "ประเทศ/ภูมิภาค",
+    "products": "สินค้าที่สนใจ",
+    "quantity": "จำนวนโดยประมาณ",
+    "message": "ความต้องการโดยละเอียด",
+    "submit": "ส่งคำขอ",
+    "required": "จำเป็น",
+    "contactInfo": "ข้อมูลการติดต่อ",
+    "address": "ที่อยู่บริษัท",
+    "selectCountry": "เลือกประเทศ/ภูมิภาค",
+    "selectQuantity": "เลือกช่วงจำนวน",
+    "placeholder": {
+      "email": "example@company.com",
+      "phone": "+66 123 456 789",
+      "message": "กรุณาอธิบายความต้องการเฉพาะของคุณ เช่น สถานการณ์การใช้งาน ข้อกำหนดทางเทคนิค เวลาจัดส่ง ฯลฯ"
+    },
+    "quantityOptions": {
+      "1k-10k": "1,000 - 10,000 ชิ้น",
+      "10k-50k": "10,000 - 50,000 ชิ้น",
+      "50k-100k": "50,000 - 100,000 ชิ้น",
+      "100k+": "100,000+ ชิ้น"
     }
   },
   "footer": {
-    "copyright": "© 2024 Xiamen Guangpu Electronics Co., Ltd. สงวนลิขสิทธิ์"
+    "copyright": "© 2024 Xiamen Guangpu Electronics Co., Ltd. สงวนลิขสิทธิ์",
+    "quickLinks": "ลิงก์ด่วน",
+    "contactUs": "ติดต่อเรา",
+    "address": "ที่อยู่",
+    "email": "อีเมล",
+    "followUs": "ติดตามเรา",
+    "certifications": "การรับรอง"
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "retry": "ลองใหม่",
+    "close": "ปิด",
+    "open": "เปิด",
+    "search": "ค้นหา",
+    "filter": "กรอง",
+    "sort": "เรียงลำดับ",
+    "new": "ใหม่",
+    "popular": "ยอดนิยม",
+    "learnMore": "เรียนรู้เพิ่มเติม"
   }
 }
