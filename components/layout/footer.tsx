@@ -14,6 +14,19 @@ interface FooterProps {
     };
     footer: {
       copyright: string;
+      quickLinks: string;
+      contactUs: string;
+      address: string;
+      email: string;
+      phone: string;
+      followUs: string;
+      certifications: string;
+      description: string;
+      privacyPolicy: string;
+      termsOfUse: string;
+    };
+    common: {
+      language: string;
     };
   };
 }
@@ -26,23 +39,7 @@ export default function Footer({ locale, messages }: FooterProps) {
     return `/${locale}${path}`;
   };
 
-  // 根据语言获取页脚文本
-  const footerText = {
-    company: locale === 'zh' ? '关于光莆' : locale === 'ar' ? 'حول Guangpu' : 'About GOPRO',
-    products: locale === 'zh' ? '产品中心' : locale === 'ar' ? 'المنتجات' : 'Products',
-    support: locale === 'zh' ? '技术支持' : locale === 'ar' ? 'الدعم' : 'Support',
-    contact: locale === 'zh' ? '联系我们' : locale === 'ar' ? 'اتصل بنا' : 'Contact',
-    description: locale === 'zh'
-      ? '光莆电子成立于1994年，是专业的LED制造商，产品涵盖红外LED、可见光LED和紫外LED，服务东南亚及中东市场。'
-      : 'GOPRO Electronics, founded in 1994, is a professional LED manufacturer serving Southeast Asia and Middle East markets.',
-    quickLinks: locale === 'zh' ? '快速链接' : locale === 'ar' ? 'روابط سريعة' : 'Quick Links',
-    contactUs: locale === 'zh' ? '联系方式' : locale === 'ar' ? 'معلومات الاتصال' : 'Contact Us',
-    address: locale === 'zh' ? '地址' : locale === 'ar' ? 'العنوان' : 'Address',
-    phone: locale === 'zh' ? '电话' : locale === 'ar' ? 'الهاتف' : 'Phone',
-    email: locale === 'zh' ? '邮箱' : locale === 'ar' ? 'البريد' : 'Email',
-    followUs: locale === 'zh' ? '关注我们' : locale === 'ar' ? 'تابعنا' : 'Follow Us',
-    certifications: locale === 'zh' ? '资质认证' : locale === 'ar' ? 'الشهادات' : 'Certifications',
-  };
+  const t = messages.footer;
 
   const currentYear = new Date().getFullYear();
 
@@ -58,11 +55,11 @@ export default function Footer({ locale, messages }: FooterProps) {
               <span className="text-2xl font-bold text-cyan-400 ml-1">LED</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
-              {footerText.description}
+              {t.description}
             </p>
             {/* Social Links */}
             <div>
-              <h4 className="text-sm font-semibold mb-3">{footerText.followUs}</h4>
+              <h4 className="text-sm font-semibold mb-3">{t.followUs}</h4>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -85,7 +82,7 @@ export default function Footer({ locale, messages }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold mb-4">{footerText.quickLinks}</h4>
+            <h4 className="text-sm font-semibold mb-4">{t.quickLinks}</h4>
             <ul className="space-y-2">
               <li>
                 <Link href={getLocalizedHref('/')} className="text-gray-400 hover:text-white text-sm transition-colors">
@@ -117,7 +114,7 @@ export default function Footer({ locale, messages }: FooterProps) {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-sm font-semibold mb-4">{footerText.contactUs}</h4>
+            <h4 className="text-sm font-semibold mb-4">{t.contactUs}</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start">
                 <svg className="w-4 h-4 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +134,7 @@ export default function Footer({ locale, messages }: FooterProps) {
 
           {/* Certifications */}
           <div>
-            <h4 className="text-sm font-semibold mb-4">{footerText.certifications}</h4>
+            <h4 className="text-sm font-semibold mb-4">{t.certifications}</h4>
             <div className="flex flex-wrap gap-2">
               <span className="px-2 py-1 bg-gray-800 text-xs text-gray-400 rounded">ISO 9001</span>
               <span className="px-2 py-1 bg-gray-800 text-xs text-gray-400 rounded">ISO 14001</span>
@@ -156,10 +153,10 @@ export default function Footer({ locale, messages }: FooterProps) {
             <p>© {currentYear} {messages.footer.copyright}</p>
             <div className="flex space-x-4 mt-2 md:mt-0">
               <Link href={getLocalizedHref('/privacy')} className="hover:text-white transition-colors">
-                {locale === 'zh' ? '隐私政策' : 'Privacy Policy'}
+                {t.privacyPolicy}
               </Link>
               <Link href={getLocalizedHref('/terms')} className="hover:text-white transition-colors">
-                {locale === 'zh' ? '使用条款' : 'Terms of Use'}
+                {t.termsOfUse}
               </Link>
             </div>
           </div>

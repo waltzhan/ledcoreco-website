@@ -172,7 +172,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                         {product.name[locale] || product.name.en}
                       </h3>
                       <p className="text-sm text-gray-500 mb-2">
-                        {t('products.model') || 'Model'}: {product.model}
+                        {t('products.model')}: {product.model}
                       </p>
                       <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                         {product.shortDescription?.[locale] || product.shortDescription?.en}

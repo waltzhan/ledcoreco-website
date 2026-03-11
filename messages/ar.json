@@ -10,7 +10,8 @@
     "about": "من نحن",
     "support": "الدعم",
     "contact": "اتصل بنا",
-    "inquiry": "طلب عرض سعر"
+    "inquiry": "طلب عرض سعر",
+    "language": "اللغة"
   },
   "hero": {
     "title": "خلق حياة صحية وذكية",
@@ -81,8 +82,12 @@
     "contactUs": "اتصل بنا",
     "address": "العنوان",
     "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
     "followUs": "تابعنا",
-    "certifications": "الشهادات"
+    "certifications": "الشهادات",
+    "description": "GOPRO Electronics، تأسست عام 1994، هي شركة مصنعة محترفة لليد تخدم أسواق جنوب شرق آسيا والشرق الأوسط.",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfUse": "شروط الاستخدام"
   },
   "common": {
     "loading": "جاري التحميل...",
@@ -95,6 +100,7 @@
     "sort": "ترتيب",
     "new": "جديد",
     "popular": "شائع",
-    "learnMore": "معرفة المزيد"
+    "learnMore": "معرفة المزيد",
+    "language": "اللغة"
   }
 }

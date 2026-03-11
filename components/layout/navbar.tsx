@@ -16,6 +16,10 @@ interface NavbarProps {
       support: string;
       contact: string;
       inquiry: string;
+      language: string;
+    };
+    common: {
+      language: string;
     };
   };
 }
@@ -166,7 +170,7 @@ export default function Navbar({ locale, messages }: NavbarProps) {
 
             {/* Mobile Language Switcher */}
             <div className="border-t pt-2 mt-2">
-              <p className="px-3 py-2 text-sm font-medium text-gray-500">🌐 Language / 语言</p>
+              <p className="px-3 py-2 text-sm font-medium text-gray-500">🌐 {messages.navigation.language || 'Language'}</p>
               {locales.map((loc) => (
                 <Link
                   key={loc}

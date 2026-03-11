@@ -10,7 +10,8 @@
     "about": "Về chúng tôi",
     "support": "Hỗ trợ",
     "contact": "Liên hệ",
-    "inquiry": "Yêu cầu báo giá"
+    "inquiry": "Yêu cầu báo giá",
+    "language": "Ngôn ngữ"
   },
   "hero": {
     "title": "Tạo dựng cuộc sống khỏe mạnh và thông minh",
@@ -81,8 +82,12 @@
     "contactUs": "Liên hệ chúng tôi",
     "address": "Địa chỉ",
     "email": "Email",
+    "phone": "Điện thoại",
     "followUs": "Theo dõi chúng tôi",
-    "certifications": "Chứng nhận"
+    "certifications": "Chứng nhận",
+    "description": "GOPRO Electronics, thành lập năm 1994, là nhà sản xuất LED chuyên nghiệp phục vụ thị trường Đông Nam Á và Trung Đông.",
+    "privacyPolicy": "Chính sách Bảo mật",
+    "termsOfUse": "Điều khoản Sử dụng"
   },
   "common": {
     "loading": "Đang tải...",
@@ -95,6 +100,7 @@
     "sort": "Sắp xếp",
     "new": "Mới",
     "popular": "Phổ biến",
-    "learnMore": "Tìm hiểu thêm"
+    "learnMore": "Tìm hiểu thêm",
+    "language": "Ngôn ngữ"
   }
 }

@@ -10,7 +10,8 @@
     "about": "Tentang Kami",
     "support": "Dukungan",
     "contact": "Kontak",
-    "inquiry": "Minta Penawaran"
+    "inquiry": "Minta Penawaran",
+    "language": "Bahasa"
   },
   "hero": {
     "title": "Menciptakan Hidup Sehat dan Cerdas",
@@ -81,8 +82,12 @@
     "contactUs": "Hubungi Kami",
     "address": "Alamat",
     "email": "Email",
+    "phone": "Telepon",
     "followUs": "Ikuti Kami",
-    "certifications": "Sertifikasi"
+    "certifications": "Sertifikasi",
+    "description": "GOPRO Electronics, didirikan tahun 1994, adalah produsen LED profesional yang melayani pasar Asia Tenggara dan Timur Tengah.",
+    "privacyPolicy": "Kebijakan Privasi",
+    "termsOfUse": "Syarat Penggunaan"
   },
   "common": {
     "loading": "Memuat...",
@@ -95,6 +100,7 @@
     "sort": "Urutkan",
     "new": "Baru",
     "popular": "Populer",
-    "learnMore": "Pelajari Lebih Lanjut"
+    "learnMore": "Pelajari Lebih Lanjut",
+    "language": "Bahasa"
   }
 }

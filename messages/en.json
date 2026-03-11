@@ -10,7 +10,8 @@
     "about": "About Us",
     "support": "Support",
     "contact": "Contact",
-    "inquiry": "Request Quote"
+    "inquiry": "Request Quote",
+    "language": "Language"
   },
   "hero": {
     "title": "Creating Healthy and Smart Living",
@@ -81,8 +82,12 @@
     "contactUs": "Contact Us",
     "address": "Address",
     "email": "Email",
+    "phone": "Phone",
     "followUs": "Follow Us",
-    "certifications": "Certifications"
+    "certifications": "Certifications",
+    "description": "GOPRO Electronics, founded in 1994, is a professional LED manufacturer serving Southeast Asia and Middle East markets.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use"
   },
   "common": {
     "loading": "Loading...",
@@ -95,6 +100,7 @@
     "sort": "Sort",
     "new": "New",
     "popular": "Popular",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "language": "Language"
   }
 }

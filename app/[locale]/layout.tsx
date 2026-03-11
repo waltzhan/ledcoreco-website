@@ -56,11 +56,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'}>
       <body className={`${isRTL ? 'rtl' : 'ltr'} flex flex-col min-h-screen`}>
-        <Navbar locale={locale as Locale} messages={{ navigation: messages.navigation }} />
+        <Navbar locale={locale as Locale} messages={{ navigation: messages.navigation, common: messages.common }} />
         <div className="flex-1">
           {children}
         </div>
-        <Footer locale={locale as Locale} messages={{ navigation: messages.navigation, footer: messages.footer }} />
+        <Footer locale={locale as Locale} messages={{ navigation: messages.navigation, footer: messages.footer, common: messages.common }} />
       </body>
     </html>
   );
