@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "光莆电子 - 专业LED制造商 始于1994",
+    "description": "红外LED、可见光LED和紫外LED的领先制造商。服务东南亚和中东市场。"
+  },
+  "navigation": {
+    "home": "首页",
+    "products": "产品中心",
+    "solutions": "解决方案",
+    "about": "关于我们",
+    "support": "技术支持",
+    "contact": "联系我们",
+    "inquiry": "获取报价"
+  },
+  "hero": {
+    "title": "创造健康智慧生活",
+    "subtitle": "始于1994年",
+    "description": "专业LED制造商，为东南亚和中东市场提供红外、可见光和紫外LED解决方案。",
+    "ctaPrimary": "浏览产品",
+    "ctaSecondary": "联系我们"
+  },
+  "trustBar": {
+    "years": "30+ 年",
+    "patents": "160+ 项专利",
+    "employees": "1200+ 员工",
+    "certifications": "全球认证"
+  },
+  "products": {
+    "title": "我们的产品",
+    "categories": {
+      "chipLed": "CHIP LED",
+      "plccLed": "PLCC LED",
+      "irSensor": "红外传感器",
+      "uvLed": "UV LED"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 厦门光莆电子股份有限公司 版权所有"
+  }
+}

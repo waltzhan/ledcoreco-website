@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "GOPRO LED - الشركة المصنعة لليد المحترفة منذ عام 1994",
+    "description": "الشركة المصنعة الرائدة لثنائيات باعثة للضوء IR ومرئية UV. خدمة أسواق جنوب شرق آسيا والشرق الأوسط."
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "solutions": "الحلول",
+    "about": "من نحن",
+    "support": "الدعم",
+    "contact": "اتصل بنا",
+    "inquiry": "طلب عرض سعر"
+  },
+  "hero": {
+    "title": "خلق حياة صحية وذكية",
+    "subtitle": "منذ عام 1994",
+    "description": "الشركة المصنعة لليد المحترفة تخدم أسواق جنوب شرق آسيا والشرق الأوسط بحلول IR والضوء المرئي وUV LED.",
+    "ctaPrimary": "استكشف المنتجات",
+    "ctaSecondary": "اتصل بنا"
+  },
+  "trustBar": {
+    "years": "30+ عاماً",
+    "patents": "160+ براءة اختراع",
+    "employees": "1200+ موظف",
+    "certifications": "شهادات عالمية"
+  },
+  "products": {
+    "title": "منتجاتنا",
+    "categories": {
+      "chipLed": "CHIP LED",
+      "plccLed": "PLCC LED",
+      "irSensor": "مستشعرات IR",
+      "uvLed": "UV LED"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 شيامن غوانبو إلكترونيات المحدودة. جميع الحقوق محفوظة."
+  }
+}

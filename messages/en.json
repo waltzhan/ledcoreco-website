@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "GOPRO LED - Professional LED Manufacturer Since 1994",
+    "description": "Leading manufacturer of IR LEDs, Visible Light LEDs, and UV LEDs. Serving Southeast Asia and Middle East markets."
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "solutions": "Solutions",
+    "about": "About Us",
+    "support": "Support",
+    "contact": "Contact",
+    "inquiry": "Request Quote"
+  },
+  "hero": {
+    "title": "Creating Healthy and Smart Living",
+    "subtitle": "Since 1994",
+    "description": "Professional LED manufacturer serving Southeast Asia and Middle East markets with IR, Visible Light, and UV LED solutions.",
+    "ctaPrimary": "Explore Products",
+    "ctaSecondary": "Contact Us"
+  },
+  "trustBar": {
+    "years": "30+ Years",
+    "patents": "160+ Patents",
+    "employees": "1200+ Employees",
+    "certifications": "Global Certifications"
+  },
+  "products": {
+    "title": "Our Products",
+    "categories": {
+      "chipLed": "CHIP LED",
+      "plccLed": "PLCC LED",
+      "irSensor": "IR Sensors",
+      "uvLed": "UV LED"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 Xiamen Guangpu Electronics Co., Ltd. All rights reserved."
+  }
+}

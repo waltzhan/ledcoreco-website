@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "GOPRO LED - Produsen LED Profesional Sejak 1994",
+    "description": "Produsen terkemuka LED IR, LED Cahaya Terlihat, dan LED UV. Melayani pasar Asia Tenggara dan Timur Tengah."
+  },
+  "navigation": {
+    "home": "Beranda",
+    "products": "Produk",
+    "solutions": "Solusi",
+    "about": "Tentang Kami",
+    "support": "Dukungan",
+    "contact": "Kontak",
+    "inquiry": "Minta Penawaran"
+  },
+  "hero": {
+    "title": "Menciptakan Hidup Sehat dan Cerdas",
+    "subtitle": "Sejak 1994",
+    "description": "Produsen LED profesional yang melayani pasar Asia Tenggara dan Timur Tengah dengan solusi LED IR, Cahaya Terlihat, dan UV.",
+    "ctaPrimary": "Jelajahi Produk",
+    "ctaSecondary": "Hubungi Kami"
+  },
+  "trustBar": {
+    "years": "30+ Tahun",
+    "patents": "160+ Paten",
+    "employees": "1200+ Karyawan",
+    "certifications": "Sertifikasi Global"
+  },
+  "products": {
+    "title": "Produk Kami",
+    "categories": {
+      "chipLed": "CHIP LED",
+      "plccLed": "PLCC LED",
+      "irSensor": "Sensor IR",
+      "uvLed": "LED UV"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 Xiamen Guangpu Electronics Co., Ltd. Hak cipta dilindungi."
+  }
+}

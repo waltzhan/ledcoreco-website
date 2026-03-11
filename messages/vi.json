@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "GOPRO LED - Nhà sản xuất LED chuyên nghiệp từ năm 1994",
+    "description": "Nhà sản xuất hàng đầu về IR LEDs, Visible Light LEDs và UV LEDs. Phục vụ thị trường Đông Nam Á và Trung Đông."
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "solutions": "Giải pháp",
+    "about": "Về chúng tôi",
+    "support": "Hỗ trợ",
+    "contact": "Liên hệ",
+    "inquiry": "Yêu cầu báo giá"
+  },
+  "hero": {
+    "title": "Tạo dựng cuộc sống khỏe mạnh và thông minh",
+    "subtitle": "Từ năm 1994",
+    "description": "Nhà sản xuất LED chuyên nghiệp phục vụ thị trường Đông Nam Á và Trung Đông với các giải pháp IR, Visible Light và UV LED.",
+    "ctaPrimary": "Khám phá sản phẩm",
+    "ctaSecondary": "Liên hệ chúng tôi"
+  },
+  "trustBar": {
+    "years": "30+ năm",
+    "patents": "160+ bằng sáng chế",
+    "employees": "1200+ nhân viên",
+    "certifications": "Chứng nhận toàn cầu"
+  },
+  "products": {
+    "title": "Sản phẩm của chúng tôi",
+    "categories": {
+      "chipLed": "CHIP LED",
+      "plccLed": "PLCC LED",
+      "irSensor": "Cảm biến IR",
+      "uvLed": "UV LED"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 Xiamen Guangpu Electronics Co., Ltd. Bảo lưu mọi quyền."
+  }
+}
