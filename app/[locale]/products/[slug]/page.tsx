@@ -145,15 +145,25 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     { name: product.name[locale] || product.name.en, url: `/products/${slug}` },
   ], locale);
 
+  // 辅助翻译函数
+  const t = (key: string) => {
+    const keys = key.split('.');
+    let value: any = messages;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || key;
+  };
+
   if (!product) {
     return (
       <main className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {locale === 'zh' ? '产品未找到' : 'Product Not Found'}
+            {t('products.productNotFound')}
           </h1>
           <Link href={getLocalizedHref('/products')} className="text-blue-900 hover:underline">
-            ← {locale === 'zh' ? '返回产品列表' : 'Back to Products'}
+            ← {t('products.backToProducts')}
           </Link>
         </div>
       </main>
@@ -207,12 +217,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {product.name[locale] || product.name.en}
             </h1>
-            <p className="text-lg text-gray-500 mb-2">Model: {product.model}</p>
+            <p className="text-lg text-gray-500 mb-2">{t('products.model')}: {product.model}</p>
             
             {/* Status Badge */}
             {product.status === 'new' && (
               <span className="inline-block bg-green-500 text-white text-sm font-bold px-3 py-1 rounded mb-6">
-                NEW
+                {t('common.new')}
               </span>
             )}
 
@@ -229,7 +239,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 {messages.navigation.inquiry}
               </Link>
               <button className="flex-1 border-2 border-blue-900 text-blue-900 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                {locale === 'zh' ? '下载数据手册' : 'Download Datasheet'}
+                {t('products.downloadDatasheet')}
               </button>
             </div>
 
@@ -237,7 +247,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {product.targetMarkets && product.targetMarkets.length > 0 && (
               <div className="mb-8">
                 <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                  {locale === 'zh' ? '目标市场' : 'Target Markets'}
+                  {t('products.targetMarkets')}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {product.targetMarkets.map((market: string) => (
@@ -257,7 +267,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                {locale === 'zh' ? '技术规格' : 'Specifications'}
+                {t('products.specifications')}
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -283,7 +293,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {/* Features */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">
-                {locale === 'zh' ? '产品特性' : 'Features'}
+                {t('products.features')}
               </h3>
               <ul className="space-y-2">
                 {(product.features[locale] || product.features.en).map((feature: string, index: number) => (
@@ -300,7 +310,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {/* Applications */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">
-                {locale === 'zh' ? '应用场景' : 'Applications'}
+                {t('products.applications')}
               </h3>
               <ul className="space-y-2">
                 {(product.applications[locale] || product.applications.en).map((app: string, index: number) => (
