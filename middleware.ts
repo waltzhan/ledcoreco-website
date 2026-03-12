@@ -88,23 +88,19 @@ export function middleware(request: NextRequest) {
 
   // 获取浏览器语言
   const browserLocale = getBrowserLocale(request);
+  console.log('[Middleware] Browser locale:', browserLocale);
 
-  // 检查是否有语言偏好cookie
-  const localeCookie = request.cookies.get('NEXT_LOCALE');
-  const targetLocale = localeCookie?.value || browserLocale;
-
-  // 重定向到对应语言版本
-  const newUrl = new URL(`/${targetLocale}${pathname}`, request.url);
+  // 重定向到浏览器语言版本
+  const newUrl = new URL(`/${browserLocale}${pathname}`, request.url);
   
-  // 设置 cookie 记住语言偏好（如果还没有）
+  // 设置 cookie 记住语言偏好
   const response = NextResponse.redirect(newUrl);
-  if (!localeCookie) {
-    response.cookies.set('NEXT_LOCALE', targetLocale, {
-      maxAge: 60 * 60 * 24 * 365, // 1年
-      path: '/',
-    });
-  }
+  response.cookies.set('NEXT_LOCALE', browserLocale, {
+    maxAge: 60 * 60 * 24 * 365, // 1年
+    path: '/',
+  });
 
+  console.log('[Middleware] Redirecting to:', newUrl.toString());
   return response;
 }
 
