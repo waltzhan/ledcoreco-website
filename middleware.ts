@@ -44,28 +44,14 @@ function getBrowserLocale(request: NextRequest): string {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 跳过静态资源和 API
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
-  ) {
+  // 只处理根路径
+  if (pathname !== '/') {
     return NextResponse.next();
   }
 
-  // 检查路径是否已包含语言前缀
-  const pathnameHasLocale = locales.some(
-    locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  );
-
-  // 已有语言前缀，直接放行
-  if (pathnameHasLocale) {
-    return NextResponse.next();
-  }
-
-  // 根路径 / 或其他无语言前缀路径，检测语言重定向
+  // 检测浏览器语言并重定向
   const browserLocale = getBrowserLocale(request);
-  const newUrl = new URL(`/${browserLocale}${pathname === '/' ? '' : pathname}`, request.url);
+  const newUrl = new URL(`/${browserLocale}`, request.url);
 
   // 使用 302 临时重定向，并禁用缓存
   const response = NextResponse.redirect(newUrl, 302);
@@ -77,10 +63,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    // 匹配根路径
-    '/',
-    // 匹配所有非语言前缀、非静态资源路径
-    '/((?!_next/|api/|static/|favicon\.ico|robots\.txt|sitemap\.xml|.*\.).*)',
-  ],
+  matcher: ['/'],
 };
