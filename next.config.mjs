@@ -8,15 +8,8 @@ const nextConfig = {
       },
     ],
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/en',
-        permanent: true,
-      },
-    ];
-  },
+  // 注意：根路径 / 的语言检测重定向在 app/page.tsx 中实现
+  // 不要在这里添加重定向规则，否则会覆盖动态语言检测
 };
 
 export default nextConfig;
