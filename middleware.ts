@@ -21,7 +21,12 @@ const browserLocaleMap: Record<string, string> = {
 // 获取浏览器首选语言
 function getBrowserLocale(request: NextRequest): string {
   const acceptLanguage = request.headers.get('accept-language');
-  if (!acceptLanguage) return defaultLocale;
+  console.log('[Middleware] Accept-Language:', acceptLanguage);
+  
+  if (!acceptLanguage) {
+    console.log('[Middleware] No Accept-Language header, using default:', defaultLocale);
+    return defaultLocale;
+  }
 
   // 解析 Accept-Language 头
   const languages = acceptLanguage
@@ -34,20 +39,26 @@ function getBrowserLocale(request: NextRequest): string {
       };
     })
     .sort((a, b) => b.priority - a.priority);
+  
+  console.log('[Middleware] Parsed languages:', languages);
 
   // 查找匹配的语言
   for (const { code } of languages) {
+    console.log(`[Middleware] Checking code: ${code}`);
     // 精确匹配
     if (browserLocaleMap[code]) {
+      console.log(`[Middleware] Matched exact: ${code} -> ${browserLocaleMap[code]}`);
       return browserLocaleMap[code];
     }
     // 前缀匹配 (如 "en-US" 匹配 "en")
     const prefix = code.split('-')[0];
     if (browserLocaleMap[prefix]) {
+      console.log(`[Middleware] Matched prefix: ${prefix} -> ${browserLocaleMap[prefix]}`);
       return browserLocaleMap[prefix];
     }
   }
 
+  console.log('[Middleware] No match found, using default:', defaultLocale);
   return defaultLocale;
 }
 
