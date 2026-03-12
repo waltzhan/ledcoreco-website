@@ -13,6 +13,8 @@
     "@sanity/client": "^7.17.0",
     "@sanity/image-url": "^2.0.3",
     "@sanity/vision": "^5.13.0",
+    "dotenv": "^17.3.1",
+    "jsdom": "^28.1.0",
     "next": "^14.2.35",
     "next-intl": "^3.26.5",
     "next-sanity": "^12.1.1",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/jsdom": "^28.0.0",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.11",
     "@types/react": "^19",
