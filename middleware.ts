@@ -106,7 +106,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // 匹配所有路径，除了静态资源
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    // 匹配根路径和所有非语言前缀路径
+    '/',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|en/|zh/|id/|th/|vi/|ar/).*)',
   ],
 };
