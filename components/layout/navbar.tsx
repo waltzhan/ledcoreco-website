@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Locale, locales, localeNames, rtlLocales } from '@/lib/i18n/config';
 
 interface NavbarProps {
@@ -28,7 +28,15 @@ export default function Navbar({ locale, messages }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isRTL = rtlLocales.includes(locale);
+
+  // 语言切换时保存 cookie
+  const handleLanguageChange = (newLocale: Locale) => {
+    // 设置 cookie
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    setIsLangMenuOpen(false);
+  };
 
   // 获取当前路径（不含locale前缀）
   const getPathWithoutLocale = () => {
@@ -113,7 +121,7 @@ export default function Navbar({ locale, messages }: NavbarProps) {
                           ? 'bg-blue-50 text-blue-900 font-medium'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
-                      onClick={() => setIsLangMenuOpen(false)}
+                      onClick={() => handleLanguageChange(loc as Locale)}
                     >
                       {localeNames[loc as Locale]}
                     </Link>
