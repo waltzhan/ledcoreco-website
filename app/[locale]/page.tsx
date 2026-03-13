@@ -1,8 +1,12 @@
+import Link from 'next/link';
+import Image from 'next/image';
 import { 
   generateOrganizationSchema, 
   generateWebsiteSchema, 
   generateFAQSchema 
 } from '@/lib/utils/structured-data';
+import { getProductsBySlugList } from '@/lib/sanity/queries';
+import { urlForImage } from '@/lib/sanity/client';
 import enMessages from '@/messages/en.json';
 import zhMessages from '@/messages/zh.json';
 import idMessages from '@/messages/id.json';
@@ -56,6 +60,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const websiteSchema = generateWebsiteSchema(locale);
   const faqSchema = generateFAQSchema(getFAQs(locale));
 
+  // 获取首页展示的4个代表产品图片
+  const FEATURED_SLUGS = [
+    'lidar-vcsel-emitter-sensor',
+    'dust-visualization-module',
+    'static-uv-sterilization-module-gp-xs17xx-series',
+    'flexible-contact-sensing-module',
+  ];
+  const featuredProducts = await getProductsBySlugList(FEATURED_SLUGS);
+  // 按 FEATURED_SLUGS 顺序排列，方便索引
+  const productMap: Record<string, any> = {};
+  for (const p of featuredProducts) {
+    productMap[p.slug?.current] = p;
+  }
+
   return (
     <>
       {/* GEO优化：结构化数据标记 */}
@@ -85,12 +103,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               {t('hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+              <Link
+                href={`/${locale}/products`}
+                className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-center"
+              >
                 {t('hero.ctaPrimary')}
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition">
+              </Link>
+              <Link
+                href={`/${locale}/contact`}
+                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition text-center"
+              >
                 {t('hero.ctaSecondary')}
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -122,21 +146,70 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               {t('products.title')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {['chipLed', 'plccLed', 'irSensor', 'uvLed'].map((category) => (
-                <div key={category} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {t(`products.categories.${category}`)}
-                  </h3>
-                  <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
-                    <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+              {[
+                {
+                  key: 'opticalSensor',
+                  categorySlug: 'optical-sensors',
+                  productSlug: 'lidar-vcsel-emitter-sensor',
+                  color: 'from-blue-50 to-blue-100',
+                  iconColor: 'text-blue-600',
+                },
+                {
+                  key: 'lightModule',
+                  categorySlug: 'light-source',
+                  productSlug: 'dust-visualization-module',
+                  color: 'from-amber-50 to-amber-100',
+                  iconColor: 'text-amber-600',
+                },
+                {
+                  key: 'sterilizationModule',
+                  categorySlug: 'sterilization',
+                  productSlug: 'static-uv-sterilization-module-gp-xs17xx-series',
+                  color: 'from-purple-50 to-purple-100',
+                  iconColor: 'text-purple-600',
+                },
+                {
+                  key: 'intelligentSensor',
+                  categorySlug: 'smart-sensors',
+                  productSlug: 'flexible-contact-sensing-module',
+                  color: 'from-green-50 to-green-100',
+                  iconColor: 'text-green-600',
+                },
+              ].map((item) => {
+                const product = productMap[item.productSlug];
+                const imgUrl = product?.mainImage ? urlForImage(product.mainImage) : '';
+                return (
+                  <div key={item.key} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition group">
+                    <Link href={`/${locale}/products?category=${item.categorySlug}`} className="block">
+                      <div className={`h-36 relative ${imgUrl ? '' : `bg-gradient-to-br ${item.color}`} flex items-center justify-center overflow-hidden`}>
+                        {imgUrl ? (
+                          <Image
+                            src={imgUrl}
+                            alt={product?.name?.[locale] || product?.name?.zh || item.key}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <svg className={`w-14 h-14 ${item.iconColor} opacity-60 group-hover:opacity-80 transition`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        )}
+                      </div>
+                    </Link>
+                    <div className="p-5">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        {t(`products.categories.${item.key}`)}
+                      </h3>
+                      <Link
+                        href={`/${locale}/products?category=${item.categorySlug}`}
+                        className="block w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800 transition text-center text-sm font-medium"
+                      >
+                        {t('products.viewDetails')}
+                      </Link>
+                    </div>
                   </div>
-                  <button className="w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800 transition">
-                    {t('products.viewDetails')}
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

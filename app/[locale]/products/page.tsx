@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Locale, locales } from '@/lib/i18n/config';
-import { urlFor } from '@/lib/sanity/client';
+import { getProducts, getCategoryTree } from '@/lib/sanity/queries';
+import { urlForImage } from '@/lib/sanity/client';
 
 // 加载翻译文件
 function getMessages(locale: string) {
@@ -16,51 +18,9 @@ function getMessages(locale: string) {
   return messagesMap[locale] || messagesMap.en;
 }
 
-// 辅助函数：通过路径获取嵌套属性
 function getNestedValue(obj: any, path: string): string {
   return path.split('.').reduce((acc, part) => acc?.[part], obj) || path;
 }
-
-// 静态产品数据（构建时使用）
-const staticProducts = [
-  {
-    _id: '1',
-    name: { en: '0603 Standard CHIP LED', zh: '0603 标准CHIP LED' },
-    slug: { current: 'gp0603-01' },
-    model: 'GP0603-01',
-    category: { name: { en: 'CHIP LED', zh: 'CHIP LED' } },
-    shortDescription: { en: 'Ultra-small indicator LED for consumer electronics', zh: '超小型指示灯LED' },
-    status: 'active',
-    targetMarkets: ['malaysia', 'indonesia', 'thailand'],
-  },
-  {
-    _id: '2',
-    name: { en: 'PLCC-2 White LED', zh: 'PLCC-2 白光LED' },
-    slug: { current: 'gp-plcc2-w' },
-    model: 'GP-PLCC2-W',
-    category: { name: { en: 'PLCC LED', zh: 'PLCC LED' } },
-    shortDescription: { en: 'High efficacy white LED for lighting', zh: '高光效白光LED' },
-    status: 'new',
-    targetMarkets: ['indonesia', 'vietnam', 'middle-east'],
-  },
-  {
-    _id: '3',
-    name: { en: '940nm IR Emitter', zh: '940nm 红外发射管' },
-    slug: { current: 'gp-ir940-e' },
-    model: 'GP-IR940-E',
-    category: { name: { en: 'IR Sensors', zh: '红外传感器' } },
-    shortDescription: { en: 'Standard IR emitter for remote control', zh: '标准红外发射管' },
-    status: 'active',
-    targetMarkets: ['malaysia', 'indonesia', 'thailand', 'vietnam'],
-  },
-];
-
-const staticCategories = [
-  { _id: '1', name: { en: 'CHIP LED', zh: 'CHIP LED' }, slug: { current: 'chip-led' } },
-  { _id: '2', name: { en: 'PLCC LED', zh: 'PLCC LED' }, slug: { current: 'plcc-led' } },
-  { _id: '3', name: { en: 'IR Sensors', zh: '红外传感器' }, slug: { current: 'ir-sensors' } },
-  { _id: '4', name: { en: 'UV LED', zh: 'UV LED' }, slug: { current: 'uv-led' } },
-];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -69,26 +29,36 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const messages = getMessages(locale);
-  
   return {
     title: `${messages.navigation.products} | GOPRO LED`,
     description: messages.metadata.description,
   };
 }
 
-export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function ProductsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ category?: string }>;
+}) {
   const { locale } = await params;
+  const { category: categorySlug } = await searchParams;
   const messages = getMessages(locale);
   const t = (key: string) => getNestedValue(messages, key);
-  
-  // 使用静态数据（构建时）
-  const products = staticProducts;
-  const categories = staticCategories;
+
+  // 从 Sanity 获取真实数据
+  const [products, categoryTree] = await Promise.all([
+    getProducts(categorySlug),
+    getCategoryTree(),
+  ]);
 
   const getLocalizedHref = (path: string) => {
     if (path === '/') return `/${locale}`;
     return `/${locale}${path}`;
   };
+
+  const isRtl = locale === 'ar';
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -103,29 +73,77 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar - Categories */}
+        <div className={`flex flex-col lg:flex-row gap-8 ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
+          {/* Sidebar - Categories Tree */}
           <aside className="lg:w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 {t('products.categoriesTitle')}
               </h2>
-              <nav className="space-y-2">
+              <nav className="space-y-1">
+                {/* 全部产品 */}
                 <Link
                   href={getLocalizedHref('/products')}
-                  className="block px-3 py-2 rounded-md text-sm font-medium bg-blue-50 text-blue-900"
+                  className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    !categorySlug
+                      ? 'bg-blue-900 text-white'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-blue-900'
+                  }`}
                 >
                   {t('products.allProducts')}
+                  <span className="ml-2 text-xs opacity-70">({products.length})</span>
                 </Link>
-                {categories.map((category: any) => (
-                  <Link
-                    key={category._id}
-                    href={getLocalizedHref(`/products?category=${category.slug.current}`)}
-                    className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-900 transition-colors"
-                  >
-                    {category.name[locale] || category.name.en}
-                  </Link>
-                ))}
+
+                {/* 顶级分类树 */}
+                {categoryTree.map((topCat: any) => {
+                  const topName = topCat.name?.[locale] || topCat.name?.en || topCat.name?.zh;
+                  const hasChildren = topCat.children && topCat.children.length > 0;
+                  const isTopActive = categorySlug === topCat.slug?.current;
+
+                  return (
+                    <div key={topCat._id}>
+                      {/* 顶级分类行 */}
+                      <Link
+                        href={getLocalizedHref(`/products?category=${topCat.slug?.current}`)}
+                        className={`flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          isTopActive
+                            ? 'bg-blue-900 text-white'
+                            : 'text-gray-800 hover:bg-gray-50 hover:text-blue-900'
+                        }`}
+                      >
+                        <span>{topName}</span>
+                        {hasChildren && (
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        )}
+                      </Link>
+
+                      {/* 子分类 */}
+                      {hasChildren && (
+                        <div className="ml-3 mt-1 space-y-1 border-l-2 border-gray-100 pl-3">
+                          {topCat.children.map((child: any) => {
+                            const childName = child.name?.[locale] || child.name?.en || child.name?.zh;
+                            const isChildActive = categorySlug === child.slug?.current;
+                            return (
+                              <Link
+                                key={child._id}
+                                href={getLocalizedHref(`/products?category=${child.slug?.current}`)}
+                                className={`block px-2 py-1.5 rounded-md text-sm transition-colors ${
+                                  isChildActive
+                                    ? 'bg-blue-100 text-blue-900 font-medium'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-blue-900'
+                                }`}
+                              >
+                                {childName}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </nav>
             </div>
           </aside>
@@ -133,76 +151,88 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
           {/* Products Grid */}
           <div className="flex-1">
             {products.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">
-                  {t('products.noProducts')}
-                </p>
+              <div className="text-center py-20">
+                <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <p className="text-gray-500 text-lg">{t('products.noProducts')}</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product: any) => (
-                  <article
-                    key={product._id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
-                  >
-                    {/* Product Image */}
-                    <div className="relative h-48 bg-gray-100 overflow-hidden">
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-blue-50 to-gray-100">
-                        <div className="text-center">
-                          <svg className="w-16 h-16 mx-auto mb-2 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span className="text-xs text-gray-500">{product.model}</span>
-                        </div>
-                      </div>
-                      {/* Status Badge */}
-                      {product.status === 'new' && (
-                        <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                          {t('common.new')}
-                        </span>
-                      )}
-                    </div>
+              <>
+                <p className="text-sm text-gray-500 mb-6">
+                  {products.length} {locale === 'zh' ? '个产品' : locale === 'ar' ? 'منتج' : 'products'}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {products.map((product: any) => {
+                    const productName = product.name?.[locale] || product.name?.en || product.name?.zh || '';
+                    const categoryName = product.category?.name?.[locale] || product.category?.name?.en || product.category?.name?.zh || '';
+                    const description = product.shortDescription?.[locale] || product.shortDescription?.en || product.shortDescription?.zh || '';
+                    const imageUrl = product.mainImage ? urlForImage(product.mainImage) : null;
 
-                    {/* Product Info */}
-                    <div className="p-6">
-                      <div className="text-xs text-blue-600 font-medium mb-2">
-                        {product.category?.name[locale] || product.category?.name.en}
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {product.name[locale] || product.name.en}
-                      </h3>
-                      <p className="text-sm text-gray-500 mb-2">
-                        {t('products.model')}: {product.model}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                        {product.shortDescription?.[locale] || product.shortDescription?.en}
-                      </p>
-
-                      {/* Target Markets */}
-                      {product.targetMarkets && product.targetMarkets.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-4">
-                          {product.targetMarkets.slice(0, 3).map((market: string) => (
-                            <span
-                              key={market}
-                              className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                            >
-                              {market}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* CTA Button */}
-                      <Link
-                        href={getLocalizedHref(`/products/${product.slug.current}`)}
-                        className="block w-full text-center bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-800 transition-colors"
+                    return (
+                      <article
+                        key={product._id}
+                        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
                       >
-                        {t('products.viewDetails')} →
-                      </Link>
-                    </div>
-                  </article>
-                ))}
-              </div>
+                        {/* Product Image */}
+                        <div className="relative h-48 bg-gray-100 overflow-hidden">
+                          {imageUrl ? (
+                            <Image
+                              src={imageUrl}
+                              alt={productName}
+                              fill
+                              className="object-contain p-4"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100">
+                              <div className="text-center">
+                                <svg className="w-16 h-16 mx-auto mb-2 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span className="text-xs text-gray-400">{product.model}</span>
+                              </div>
+                            </div>
+                          )}
+                          {product.status === 'new' && (
+                            <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                              {t('common.new')}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-5 flex flex-col flex-1">
+                          {categoryName && (
+                            <div className="text-xs text-blue-600 font-medium mb-1 uppercase tracking-wide">
+                              {categoryName}
+                            </div>
+                          )}
+                          <h3 className="text-base font-semibold text-gray-900 mb-1 line-clamp-2">
+                            {productName}
+                          </h3>
+                          {product.model && (
+                            <p className="text-xs text-gray-400 mb-2 font-mono">{product.model}</p>
+                          )}
+                          {description && (
+                            <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-1">
+                              {description}
+                            </p>
+                          )}
+
+                          {/* CTA Button */}
+                          <Link
+                            href={getLocalizedHref(`/products/${product.slug?.current}`)}
+                            className="block w-full text-center bg-blue-900 text-white py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors mt-auto"
+                          >
+                            {t('products.viewDetails')} →
+                          </Link>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
         </div>

@@ -43,6 +43,13 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'parent',
+      title: '父级分类',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      description: '若为顶级分类则留空',
+    }),
+    defineField({
       name: 'icon',
       title: '分类图标',
       type: 'image',

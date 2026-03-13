@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import { createImageUrlBuilder } from '@sanity/image-url';
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'demo-project';
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'nckyp28c';
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
 export const sanityClient = createClient({
@@ -11,9 +11,13 @@ export const sanityClient = createClient({
   useCdn: false
 });
 
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder(sanityClient);
 
 export function urlFor(source: any) {
-  if (!source) return { url: () => '' };
   return builder.image(source);
+}
+
+export function urlForImage(source: any): string {
+  if (!source) return '';
+  return builder.image(source).url();
 }

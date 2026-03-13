@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Locale, locales } from '@/lib/i18n/config';
+import InquiryForm from '@/components/forms/InquiryForm';
 
 // 加载翻译文件
 function getMessages(locale: string) {
@@ -17,10 +18,10 @@ function getMessages(locale: string) {
 
 // 静态产品列表（用于询盘表单多选）
 const productOptions = [
-  { id: 'chip-led', name: { en: 'CHIP LED', zh: 'CHIP LED' } },
-  { id: 'plcc-led', name: { en: 'PLCC LED', zh: 'PLCC LED' } },
-  { id: 'ir-sensors', name: { en: 'IR Sensors', zh: '红外传感器' } },
-  { id: 'uv-led', name: { en: 'UV LED', zh: 'UV LED' } },
+  { id: 'ir-led', name: { en: 'IR LED', zh: '红外LED', id: 'LED IR', th: 'LED อินฟราเรด', vi: 'LED Hồng ngoại', ar: 'LED الأشعة تحت الحمراء' } },
+  { id: 'visible-led', name: { en: 'Visible LED', zh: '可见光LED', id: 'LED Cahaya Terlihat', th: 'LED แสงที่มองเห็นได้', vi: 'LED Ánh sáng nhìn thấy', ar: 'LED الضوء المرئي' } },
+  { id: 'uv-led', name: { en: 'UV LED', zh: '紫外LED', id: 'LED UV', th: 'LED UV', vi: 'LED UV', ar: 'LED UV' } },
+  { id: 'other', name: { en: 'Other', zh: '其他', id: 'Lainnya', th: 'อื่นๆ', vi: 'Khác', ar: 'أخرى' } },
 ];
 
 export function generateStaticParams() {
@@ -80,6 +81,37 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     emailValue: emailValue,
   };
 
+  // 表单消息
+  const formMessages = {
+    companyName: t('contact.companyName'),
+    contactName: t('contact.contactName'),
+    email: t('contact.email'),
+    phone: t('contact.phone'),
+    country: t('contact.country'),
+    products: t('contact.products'),
+    quantity: t('contact.quantity'),
+    message: t('contact.message'),
+    submit: t('contact.submit'),
+    selectCountry: t('contact.selectCountry'),
+    selectQuantity: t('contact.selectQuantity'),
+    quantityOptions: {
+      '1k-10k': t('contact.quantityOptions.1k-10k'),
+      '10k-50k': t('contact.quantityOptions.10k-50k'),
+      '50k-100k': t('contact.quantityOptions.50k-100k'),
+      '100k+': t('contact.quantityOptions.100k+'),
+    },
+    placeholder: {
+      email: t('contact.placeholder.email'),
+      phone: t('contact.placeholder.phone'),
+      message: t('contact.placeholder.message'),
+    },
+    submitStatus: {
+      sending: t('contact.submitStatus.sending'),
+      success: t('contact.submitStatus.success'),
+      error: t('contact.submitStatus.error'),
+    },
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header Section */}
@@ -95,134 +127,11 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-8">
-              <form className="space-y-6">
-                {/* Company & Contact Name */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {labels.companyName} <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder={labels.companyName}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {labels.contactName} <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder={labels.contactName}
-                    />
-                  </div>
-                </div>
-
-                {/* Email & Phone */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {labels.email} <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder={t('contact.placeholder.email')}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {labels.phone} <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder={t('contact.placeholder.phone')}
-                    />
-                  </div>
-                </div>
-
-                {/* Country */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {labels.country} <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">{t('contact.selectCountry')}</option>
-                    <option value="malaysia">Malaysia</option>
-                    <option value="indonesia">Indonesia</option>
-                    <option value="thailand">Thailand</option>
-                    <option value="vietnam">Vietnam</option>
-                    <option value="singapore">Singapore</option>
-                    <option value="philippines">Philippines</option>
-                    <option value="uae">UAE</option>
-                    <option value="saudi-arabia">Saudi Arabia</option>
-                    <option value="other">{locale === 'zh' ? '其他' : 'Other'}</option>
-                  </select>
-                </div>
-
-                {/* Products of Interest */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    {labels.products}
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {productOptions.map((product) => (
-                      <label key={product.id} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value={product.id}
-                          className="w-4 h-4 text-blue-900 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">{product.name[locale as keyof typeof product.name] || product.name.en}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Quantity */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {labels.quantity}
-                  </label>
-                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="">{t('contact.selectQuantity')}</option>
-                    <option value="1k-10k">{t('contact.quantityOptions.1k-10k')}</option>
-                    <option value="10k-50k">{t('contact.quantityOptions.10k-50k')}</option>
-                    <option value="50k-100k">{t('contact.quantityOptions.50k-100k')}</option>
-                    <option value="100k+">{t('contact.quantityOptions.100k+')}</option>
-                  </select>
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {labels.message}
-                  </label>
-                  <textarea
-                    rows={5}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    placeholder={t('contact.placeholder.message')}
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  className="w-full bg-blue-900 text-white py-4 rounded-lg font-semibold text-lg hover:bg-blue-800 transition-colors"
-                >
-                  {labels.submit}
-                </button>
-              </form>
+              <InquiryForm
+                locale={locale}
+                messages={formMessages}
+                productOptions={productOptions}
+              />
             </div>
           </div>
 
