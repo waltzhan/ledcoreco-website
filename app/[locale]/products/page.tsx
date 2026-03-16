@@ -22,8 +22,8 @@ function getNestedValue(obj: any, path: string): string {
   return path.split('.').reduce((acc, part) => acc?.[part], obj) || path;
 }
 
-// 标记为动态渲染，避免构建时获取数据
-export const dynamic = 'force-dynamic';
+// ISR 配置：每 1 小时重新验证
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

@@ -20,16 +20,39 @@ function getMessages(locale: string) {
   return messagesMap[locale] || messagesMap.en;
 }
 
-// 标记为动态渲染模式，避免构建时获取数据
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
+// ISR 配置：每 1 小时重新验证
+export const revalidate = 3600;
 
-// 暂时禁用静态生成，使用动态渲染
-// 后续可以恢复静态生成，当 Sanity 数据稳定后
+// 生成静态参数 - 使用备用 slug 列表
 export async function generateStaticParams() {
-  // 返回空数组，使用动态渲染
-  // 这样可以避免构建时连接 Sanity 失败
-  return [];
+  // 使用已知的产品 slug 列表
+  // 这些是从 Sanity 获取的真实产品 slug
+  const knownSlugs = [
+    'lidar-vcsel-emitter-sensor',
+    'dust-visualization-module',
+    'static-uv-sterilization-module-gp-xs17xx-series',
+    'flexible-contact-sensing-module',
+    'proximity-reflective-ir-sensor-module-1',
+    'proximity-reflective-ir-sensor-module-2',
+    'proximity-reflective-ir-sensor-module-3',
+    'face-recognition-body-detection-ir-sensor-1',
+    'face-recognition-body-detection-ir-sensor-2',
+    'face-recognition-body-detection-ir-sensor-3',
+    'air-quality-sensor-module',
+    'uv-sterilization-module-gp-xs15xx-series',
+    'uv-sterilization-module-gp-xs16xx-series',
+    'uv-sterilization-module-gp-xs18xx-series',
+    'uv-sterilization-module-gp-xs19xx-series',
+    'uv-sterilization-module-gp-xs20xx-series',
+  ];
+  
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const slug of knownSlugs) {
+      params.push({ locale, slug });
+    }
+  }
+  return params;
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ledcoreco.com';

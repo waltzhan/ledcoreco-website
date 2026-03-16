@@ -4,7 +4,6 @@ import { getAllProductSlugs, getCategories } from '@/lib/sanity/queries';
 
 // 标记为动态路由，避免构建时获取数据
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // 每小时重新验证
 
 // 静态页面路径及优先级配置
 const staticPages = [
