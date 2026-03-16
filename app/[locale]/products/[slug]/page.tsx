@@ -20,15 +20,16 @@ function getMessages(locale: string) {
   return messagesMap[locale] || messagesMap.en;
 }
 
+// 标记为动态渲染模式，避免构建时获取数据
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
+// 暂时禁用静态生成，使用动态渲染
+// 后续可以恢复静态生成，当 Sanity 数据稳定后
 export async function generateStaticParams() {
-  const slugs = await getAllProductSlugs();
-  const params: { locale: string; slug: string }[] = [];
-  for (const locale of locales) {
-    for (const item of slugs) {
-      params.push({ locale, slug: item.slug });
-    }
-  }
-  return params;
+  // 返回空数组，使用动态渲染
+  // 这样可以避免构建时连接 Sanity 失败
+  return [];
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ledcoreco.com';
