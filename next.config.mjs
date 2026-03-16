@@ -20,11 +20,6 @@ const nextConfig = {
   
   // SEO优化：优化构建输出
   poweredByHeader: false,
-  
-  // 实验性功能：部分预渲染（提升首屏加载速度）
-  experimental: {
-    ppr: true,
-  },
 };
 
 export default nextConfig;
