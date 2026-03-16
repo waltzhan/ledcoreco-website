@@ -1,10 +1,17 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // 接收询盘邮件的目标邮箱
 const INQUIRY_EMAIL = process.env.INQUIRY_EMAIL || 'sales@ledcoreco.com';
+
+// 延迟初始化 Resend 客户端（避免构建时缺少 API Key 错误）
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(apiKey);
+}
 
 // 产品选项映射（用于邮件显示）
 const productLabels: Record<string, Record<string, string>> = {
@@ -66,6 +73,7 @@ export async function POST(request: NextRequest) {
     const quantityLabel = quantityLabels[quantity]?.[locale] || quantityLabels[quantity]?.en || quantity || '-';
 
     // 发送邮件给销售团队
+    const resend = getResendClient();
     await resend.emails.send({
       from: 'GOPRO LED Inquiry <inquiry@ledcoreco.com>',
       to: INQUIRY_EMAIL,
