@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -8,12 +9,72 @@ import {
 } from '@/lib/utils/structured-data';
 import { getProductsBySlugList } from '@/lib/sanity/queries';
 import { urlForImage } from '@/lib/sanity/client';
+import { locales } from '@/lib/i18n/config';
 import enMessages from '@/messages/en.json';
 import zhMessages from '@/messages/zh.json';
 import idMessages from '@/messages/id.json';
 import thMessages from '@/messages/th.json';
 import viMessages from '@/messages/vi.json';
 import arMessages from '@/messages/ar.json';
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ledcoreco.com';
+
+// SEO: 生成首页 metadata
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const messages = messagesMap[locale] || enMessages;
+  
+  const title = messages.metadata?.title || 'GOPRO LED - Professional LED Manufacturer';
+  const description = messages.metadata?.description || 'Leading manufacturer of IR LEDs, Visible Light LEDs, and UV LEDs';
+  
+  // 为每种语言生成 alternate 链接
+  const alternateLanguages: Record<string, string> = {};
+  for (const loc of locales) {
+    alternateLanguages[loc] = `${baseUrl}/${loc}`;
+  }
+  
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: alternateLanguages,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}`,
+      siteName: locale === 'zh' ? '光莆LED' : 'GOPRO LED',
+      locale: locale,
+      type: 'website',
+      images: [
+        {
+          url: `${baseUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${baseUrl}/og-image.jpg`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  };
+}
 
 const messagesMap: Record<string, typeof enMessages> = {
   en: enMessages,

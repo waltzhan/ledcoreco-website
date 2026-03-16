@@ -2,10 +2,10 @@
 import { createClient } from '@sanity/client';
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: 'nckyp28c',
+  dataset: 'production',
   apiVersion: '2024-03-10',
-  token: process.env.SANITY_API_TOKEN,
+  token: 'skb7xF9nxsT6bfoJsTAQGBgA7q1iSNjQecXG0NmHCNx42QreJAHuWEwmOQcAPBUcPoO9TrsVMFyYPUZD8jIjA5d1jJEf0fyjCGwUpDGrvcgTfix322mvO0WHKduQ00kxYZ3rU4VGQOnncTOl9qDMtWF947NA5gcltdJm9xxjOcwuFFMphfqL',
   useCdn: false,
 });
 
@@ -15,13 +15,15 @@ const categories = [
     name: {
       zh: 'CHIP LED',
       en: 'CHIP LED',
+      id: 'CHIP LED',
+      th: 'CHIP LED',
+      vi: 'CHIP LED',
+      ar: 'CHIP LED',
     },
-    slug: {
-      current: 'chip-led',
-    },
+    slug: { current: 'chip-led' },
     description: {
-      zh: '适用于消费电子产品的贴片式LED，包括0603、0805、1206等标准封装',
-      en: 'SMD LEDs for consumer electronics, including 0603, 0805, 1206 standard packages',
+      zh: '超小型封装LED，适用于消费电子指示灯',
+      en: 'Ultra-small package LEDs for consumer electronics indicators',
     },
     orderRank: 1,
   },
@@ -30,13 +32,15 @@ const categories = [
     name: {
       zh: 'PLCC LED',
       en: 'PLCC LED',
+      id: 'PLCC LED',
+      th: 'PLCC LED',
+      vi: 'PLCC LED',
+      ar: 'PLCC LED',
     },
-    slug: {
-      current: 'plcc-led',
-    },
+    slug: { current: 'plcc-led' },
     description: {
-      zh: '高亮度PLCC封装LED，适用于照明和背光应用',
-      en: 'High brightness PLCC package LEDs for lighting and backlight applications',
+      zh: '中高功率LED，适用于照明和显示',
+      en: 'Medium to high power LEDs for lighting and display',
     },
     orderRank: 2,
   },
@@ -45,28 +49,32 @@ const categories = [
     name: {
       zh: '红外传感器',
       en: 'IR Sensors',
+      id: 'Sensor IR',
+      th: 'เซ็นเซอร์อินฟราเรด',
+      vi: 'Cảm biến hồng ngoại',
+      ar: 'مستشعرات الأشعة تحت الحمراء',
     },
-    slug: {
-      current: 'ir-sensors',
-    },
+    slug: { current: 'ir-sensors' },
     description: {
-      zh: '红外发射管和接收管，适用于家电控制、安防感应等应用',
-      en: 'IR emitters and receivers for appliance control, security sensing applications',
+      zh: '红外发射和接收器件，适用于传感应用',
+      en: 'Infrared emitters and receivers for sensing applications',
     },
     orderRank: 3,
   },
   {
     _type: 'category',
     name: {
-      zh: 'UV LED',
+      zh: '紫外LED',
       en: 'UV LED',
+      id: 'UV LED',
+      th: 'UV LED',
+      vi: 'UV LED',
+      ar: 'UV LED',
     },
-    slug: {
-      current: 'uv-led',
-    },
+    slug: { current: 'uv-led' },
     description: {
-      zh: '紫外LED，适用于消毒、固化、检测等专业应用',
-      en: 'UV LEDs for disinfection, curing, detection and other professional applications',
+      zh: '紫外光LED，适用于消毒和固化',
+      en: 'Ultraviolet LEDs for sterilization and curing',
     },
     orderRank: 4,
   },
@@ -89,13 +97,13 @@ async function seedCategories() {
       }
       
       const result = await client.create(category);
-      console.log(`创建分类成功: ${category.name.zh} (ID: ${result._id})`);
+      console.log(`✅ 创建分类: ${category.name.zh} (${result._id})`);
     } catch (error) {
-      console.error(`创建分类失败: ${category.name.zh}`, error);
+      console.error(`❌ 创建分类失败 ${category.name.zh}:`, error);
     }
   }
   
-  console.log('产品分类初始化完成！');
+  console.log('分类初始化完成！');
 }
 
 seedCategories();

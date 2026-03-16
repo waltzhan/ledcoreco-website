@@ -29,12 +29,50 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ledcoreco.com';
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const messages = getMessages(locale);
+  
+  const title = `${messages.navigation.products} | GOPRO LED`;
+  const description = messages.metadata?.description;
+  
+  // 为每种语言生成 alternate 链接
+  const alternateLanguages: Record<string, string> = {};
+  for (const loc of locales) {
+    alternateLanguages[loc] = `${baseUrl}/${loc}/products`;
+  }
+  
   return {
-    title: `${messages.navigation.products} | GOPRO LED`,
-    description: messages.metadata.description,
+    title,
+    description,
+    alternates: {
+      canonical: `${baseUrl}/${locale}/products`,
+      languages: alternateLanguages,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}/products`,
+      siteName: locale === 'zh' ? '光莆LED' : 'GOPRO LED',
+      locale: locale,
+      type: 'website',
+      images: [
+        {
+          url: `${baseUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${baseUrl}/og-image.jpg`],
+    },
   };
 }
 

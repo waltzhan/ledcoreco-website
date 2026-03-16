@@ -2,10 +2,10 @@
 import { createClient } from '@sanity/client';
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: 'nckyp28c',
+  dataset: 'production',
   apiVersion: '2024-03-10',
-  token: process.env.SANITY_API_TOKEN,
+  token: 'skb7xF9nxsT6bfoJsTAQGBgA7q1iSNjQecXG0NmHCNx42QreJAHuWEwmOQcAPBUcPoO9TrsVMFyYPUZD8jIjA5d1jJEf0fyjCGwUpDGrvcgTfix322mvO0WHKduQ00kxYZ3rU4VGQOnncTOl9qDMtWF947NA5gcltdJm9xxjOcwuFFMphfqL',
   useCdn: false,
 });
 
