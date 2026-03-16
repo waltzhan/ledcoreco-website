@@ -328,9 +328,11 @@ export default async function ProductDetailPage({
             </div>
           </div>
 
-          {/* Features & Applications */}
-          {(features.length > 0 || applications.length > 0) && (
+          {/* Features & Applications - 暂时注释掉产品特性版块 */}
+          {applications.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              {/* 
+              TODO: 产品特性版块暂时隐藏，等待更好的内容匹配后再启用
               {features.length > 0 && (
                 <div className="bg-white rounded-xl shadow-md p-8">
                   <h2 className="text-xl font-bold text-gray-900 mb-5">{t('products.features')}</h2>
@@ -346,6 +348,7 @@ export default async function ProductDetailPage({
                   </ul>
                 </div>
               )}
+              */}
 
               {applications.length > 0 && (
                 <div className="bg-white rounded-xl shadow-md p-8">
