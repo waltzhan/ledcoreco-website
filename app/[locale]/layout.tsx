@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { locales, type Locale, rtlLocales, defaultLocale } from '@/lib/i18n/config';
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 import './globals.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ledcoreco.com';
@@ -56,6 +57,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'}>
       <body className={`${isRTL ? 'rtl' : 'ltr'} flex flex-col min-h-screen`}>
+        {/* GA4 数据分析（afterInteractive，不阻塞渲染） */}
+        <GoogleAnalytics />
         <Navbar locale={locale as Locale} messages={{ navigation: messages.navigation, common: messages.common }} />
         <div className="flex-1">
           {children}

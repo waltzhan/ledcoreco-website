@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Locale, locales } from '@/lib/i18n/config';
 import { getProducts, getCategoryTree } from '@/lib/sanity/queries';
 import { urlForImage } from '@/lib/sanity/client';
+import Breadcrumb from '@/components/ui/breadcrumb';
 
 // 加载翻译文件
 function getMessages(locale: string) {
@@ -113,7 +114,17 @@ export default async function ProductsPage({
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* 面包屑导航 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: t('navigation.home'), href: `/${locale}` },
+            { label: t('navigation.products') },
+          ]}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className={`flex flex-col lg:flex-row gap-8 ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
           {/* Sidebar - Categories Tree */}
           <aside className="lg:w-64 flex-shrink-0">

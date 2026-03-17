@@ -6,6 +6,7 @@ import { getArticles, getArticlesCount, getArticleCategories } from '@/lib/sanit
 import { urlForImage } from '@/lib/sanity/client';
 import { locales } from '@/lib/i18n/config';
 import { Pagination } from '../../../components/ui/pagination';
+import Breadcrumb from '@/components/ui/breadcrumb';
 import enMessages from '@/messages/en.json';
 import zhMessages from '@/messages/zh.json';
 import idMessages from '@/messages/id.json';
@@ -124,7 +125,17 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
           </div>
         </div>
       </section>
-      
+
+      {/* 面包屑导航 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: t('navigation.home'), href: `/${locale}` },
+            { label: t('navigation.news') },
+          ]}
+        />
+      </div>
+
       {/* Category Filter */}
       <section className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

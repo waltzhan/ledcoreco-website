@@ -297,6 +297,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                             src={imgUrl}
                             alt={product?.name?.[locale] || product?.name?.zh || item.key}
                             fill
+                            // 性能优化：第一个产品图片优先加载（LCP），其余懒加载
+                            priority={item.key === 'opticalSensor'}
+                            loading={item.key === 'opticalSensor' ? 'eager' : 'lazy'}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (

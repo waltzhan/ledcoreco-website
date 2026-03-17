@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { trackEvent } from '@/components/analytics/GoogleAnalytics';
 
 interface ProductOption {
   id: string;
@@ -86,6 +87,13 @@ export default function InquiryForm({ locale, messages, productOptions }: Inquir
 
       if (response.ok) {
         setSubmitStatus('success');
+        // GA4 转化跟踪：询盘提交成功
+        trackEvent('inquiry_submit', {
+          locale,
+          product_count: formData.products.length,
+          quantity: formData.quantity,
+          country: formData.country,
+        });
         // 重置表单
         setFormData({
           companyName: '',
