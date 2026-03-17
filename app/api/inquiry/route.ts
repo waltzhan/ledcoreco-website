@@ -6,7 +6,7 @@ const INQUIRY_EMAIL = process.env.INQUIRY_EMAIL || 'sales@ledcoreco.com';
 
 // 发件人配置
 const FROM_EMAIL = 'sales@ledcoreco.com';
-const FROM_NAME = 'GOPRO LED Inquiry';
+const FROM_NAME = 'GOPRO LED 销售团队';
 
 // 产品选项映射（用于邮件显示）
 const productLabels: Record<string, Record<string, string>> = {
