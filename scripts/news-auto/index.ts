@@ -1,32 +1,49 @@
 import { crawlNews } from './crawler';
 import { processArticles } from './ai-processor';
 import { publishArticles } from './publisher';
+import { shouldPublish, getPublishQuota } from './scheduler';
 import type { RawArticle } from './crawler';
 import type { ProcessedArticle } from './ai-processor';
 
 // 主流程
 export async function runNewsAutomation(): Promise<void> {
   console.log('🚀 Starting news automation...');
-  console.log(`⏰ ${new Date().toLocaleString()}`);
-  
+  console.log(`⏰ ${new Date().toLocaleString()} (UTC)`);
+  console.log(`🌏 Beijing Time: ${new Date(Date.now() + 8 * 60 * 60 * 1000).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })}`);
+
   try {
-    // 1. 抓取新闻
+    // 1. 检查是否应该发布（时间窗口 + 每日限额）
+    const publishCheck = await shouldPublish();
+    console.log(`\n📋 Publish check: ${publishCheck.reason}`);
+    console.log(`   Remaining quota: ${publishCheck.remaining}`);
+
+    if (!publishCheck.should) {
+      console.log('⏹️ Skipping automation:', publishCheck.reason);
+      return;
+    }
+
+    // 2. 抓取新闻
     const rawArticles = await crawlNews();
     if (rawArticles.length === 0) {
       console.log('📭 No new articles found');
       return;
     }
-    
-    // 2. AI 处理
-    const processedArticles = await processArticles(rawArticles);
+
+    // 3. 根据剩余配额限制处理数量
+    const quota = await getPublishQuota();
+    const articlesToProcess = rawArticles.slice(0, quota);
+    console.log(`\n📝 Processing ${articlesToProcess.length} articles (quota: ${quota})`);
+
+    // 4. AI 处理
+    const processedArticles = await processArticles(articlesToProcess);
     if (processedArticles.length === 0) {
       console.log('❌ Article processing failed');
       return;
     }
-    
-    // 3. 构建 sourceMap
+
+    // 5. 构建 sourceMap
     const sourceMap = new Map<string, { url: string; name: string }>();
-    rawArticles.forEach((raw, index) => {
+    articlesToProcess.forEach((raw, index) => {
       if (processedArticles[index]) {
         sourceMap.set(processedArticles[index].title.zh, {
           url: raw.link,
@@ -34,15 +51,16 @@ export async function runNewsAutomation(): Promise<void> {
         });
       }
     });
-    
-    // 4. 发布到 Sanity
+
+    // 6. 发布到 Sanity
     const published = await publishArticles(processedArticles, sourceMap);
-    
+
     console.log('\n📊 Summary:');
     console.log(`  Crawled: ${rawArticles.length}`);
     console.log(`  Processed: ${processedArticles.length}`);
     console.log(`  Published: ${published}`);
-    
+    console.log(`  Remaining quota: ${quota - published}`);
+
   } catch (error) {
     console.error('💥 Automation failed:', error);
     throw error;

@@ -33,7 +33,13 @@
   "crons": [
     {
       "path": "/api/cron/news",
-      "schedule": "0 9 * * *"
+      "schedule": "0 1 * * *",
+      "description": "北京时间 9:00 (UTC+8)"
+    },
+    {
+      "path": "/api/cron/news",
+      "schedule": "0 7 * * *",
+      "description": "北京时间 15:00 (UTC+8)"
     }
   ]
 }

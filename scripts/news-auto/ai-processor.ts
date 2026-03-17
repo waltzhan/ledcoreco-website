@@ -207,20 +207,21 @@ ${zhContent.substring(0, 300)}
 }
 
 // 批量处理
+// 注意：articles 传入前已由 scheduler.getPublishQuota() 限制数量
 export async function processArticles(articles: RawArticle[]): Promise<ProcessedArticle[]> {
   const processed: ProcessedArticle[] = [];
-  
-  for (const article of articles.slice(0, NEWS_CONFIG.publish.maxArticlesPerDay)) {
+
+  for (const article of articles) {
     try {
       const result = await processArticle(article);
       processed.push(result);
-      
+
       // 避免API限流
       await new Promise(resolve => setTimeout(resolve, 2000));
     } catch (error) {
       console.error(`Failed to process article: ${article.title}`, error);
     }
   }
-  
+
   return processed;
 }
