@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     // 发送邮件给销售团队
     const resend = getResendClient();
     await resend.emails.send({
-      from: 'GOPRO LED Inquiry <inquiry@ledcoreco.com>',
+      from: 'GOPRO LED Inquiry <onboarding@resend.dev>',
       to: INQUIRY_EMAIL,
       subject: `【询盘】${companyName} - ${contactName}`,
       html: `
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
 
     // 发送确认邮件给用户
     await resend.emails.send({
-      from: 'GOPRO LED <noreply@ledcoreco.com>',
+      from: 'GOPRO LED <onboarding@resend.dev>',
       to: email,
       subject: locale === 'zh' ? '【GOPRO LED】询盘提交成功' : '[GOPRO LED] Inquiry Received',
       html: getAutoReplyEmail(locale, companyName),
