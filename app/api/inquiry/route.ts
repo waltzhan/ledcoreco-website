@@ -1,18 +1,12 @@
-import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+import { sendEmail } from '@/lib/email/smtp';
 
 // 接收询盘邮件的目标邮箱
 const INQUIRY_EMAIL = process.env.INQUIRY_EMAIL || 'sales@ledcoreco.com';
 
-// 延迟初始化 Resend 客户端（避免构建时缺少 API Key 错误）
-// 注意：发件人必须使用 Resend 验证过的域名或测试域名
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error('RESEND_API_KEY is not configured');
-  }
-  return new Resend(apiKey);
-}
+// 发件人配置
+const FROM_EMAIL = 'sales@ledcoreco.com';
+const FROM_NAME = 'GOPRO LED Inquiry';
 
 // 产品选项映射（用于邮件显示）
 const productLabels: Record<string, Record<string, string>> = {
@@ -74,9 +68,8 @@ export async function POST(request: NextRequest) {
     const quantityLabel = quantityLabels[quantity]?.[locale] || quantityLabels[quantity]?.en || quantity || '-';
 
     // 发送邮件给销售团队
-    const resend = getResendClient();
-    await resend.emails.send({
-      from: 'GOPRO LED Inquiry <onboarding@resend.dev>',
+    await sendEmail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: INQUIRY_EMAIL,
       subject: `【询盘】${companyName} - ${contactName}`,
       html: `
@@ -123,8 +116,8 @@ export async function POST(request: NextRequest) {
     });
 
     // 发送确认邮件给用户
-    await resend.emails.send({
-      from: 'GOPRO LED <onboarding@resend.dev>',
+    await sendEmail({
+      from: `GOPRO LED <${FROM_EMAIL}>`,
       to: email,
       subject: locale === 'zh' ? '【GOPRO LED】询盘提交成功' : '[GOPRO LED] Inquiry Received',
       html: getAutoReplyEmail(locale, companyName),
