@@ -23,11 +23,43 @@ async function getCategoryId(categorySlug: string): Promise<string | null> {
   return await client.fetch(query);
 }
 
+// 上传图片到 Sanity
+async function uploadImageFromUrl(imageUrl: string): Promise<string | null> {
+  try {
+    if (!imageUrl || !imageUrl.startsWith('http')) {
+      return null;
+    }
+    
+    // 下载图片
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      console.error(`  ✗ Failed to download image: ${response.status}`);
+      return null;
+    }
+    
+    const buffer = Buffer.from(await response.arrayBuffer());
+    
+    // 使用 Sanity 的 assets API 上传图片
+    const doc = await client.assets.upload('image', buffer, {
+      source: {
+        name: 'news-auto',
+        id: imageUrl,
+      },
+    });
+    
+    return doc._id;
+  } catch (error) {
+    console.error('  ✗ Image upload failed:', error);
+    return null;
+  }
+}
+
 // 发布文章到 Sanity
 export async function publishArticle(
   processed: ProcessedArticle,
   sourceUrl: string,
-  sourceName: string
+  sourceName: string,
+  imageUrl?: string
 ): Promise<boolean> {
   try {
     // 检查重复
@@ -44,8 +76,25 @@ export async function publishArticle(
       return false;
     }
     
+    // 上传图片（如果有）
+    let coverImage = null;
+    if (imageUrl) {
+      console.log(`  📷 Uploading image: ${imageUrl}`);
+      const imageAssetId = await uploadImageFromUrl(imageUrl);
+      if (imageAssetId) {
+        coverImage = {
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: imageAssetId,
+          },
+        };
+        console.log('  ✓ Image uploaded successfully');
+      }
+    }
+    
     // 构建 Sanity 文档
-    const doc = {
+    const doc: any = {
       _type: 'article',
       title: processed.title,
       slug: {
@@ -57,6 +106,7 @@ export async function publishArticle(
       },
       tags: processed.tags,
       excerpt: processed.excerpt,
+      ...(coverImage && { coverImage }),
       content: {
         zh: [
           {
@@ -164,7 +214,7 @@ export async function publishArticle(
 // 批量发布
 export async function publishArticles(
   articles: ProcessedArticle[],
-  sourceMap: Map<string, { url: string; name: string }>
+  sourceMap: Map<string, { url: string; name: string; imageUrl?: string }>
 ): Promise<number> {
   let published = 0;
   
@@ -176,7 +226,7 @@ export async function publishArticles(
       continue;
     }
     
-    const success = await publishArticle(article, source.url, source.name);
+    const success = await publishArticle(article, source.url, source.name, source.imageUrl);
     if (success) {
       published++;
     }

@@ -6,7 +6,7 @@ export interface ProcessedArticle {
   title: Record<string, string>;
   excerpt: Record<string, string>;
   content: Record<string, string>;
-  tags: string[];
+  tags: string[]; // 英文标签，在所有语言版本下通用
   category: string;
   seo: {
     metaTitle: Record<string, string>;
@@ -16,7 +16,7 @@ export interface ProcessedArticle {
 }
 
 // 通义千问 API 调用（阿里云百炼大模型）
-async function callQwen(prompt: string): Promise<string> {
+export async function callQwen(prompt: string): Promise<string> {
   const apiKey = process.env.DASHSCOPE_API_KEY;
   
   if (!apiKey) {
@@ -107,24 +107,28 @@ ${content}
   return await callQwen(prompt);
 }
 
-// 提取关键词
+// 提取英文关键词（LED行业术语通用英文）
 async function extractKeywords(content: string): Promise<string[]> {
   const prompt = `
-请从以下LED行业文章中提取5-8个关键词：
+Please extract 5-8 keywords from the following LED industry article in English:
 
 ${content.substring(0, 500)}
 
-要求：
-1. 关键词要涵盖文章核心主题
-2. 包含技术术语和产品类别
-3. 适合SEO优化
-4. 用逗号分隔输出
+Requirements:
+1. Keywords should cover the core topics of the article
+2. Include technical terms and product categories
+3. Suitable for SEO optimization
+4. Output separated by commas
+5. Output keywords only, no numbers or other explanations
+6. Use English only, no Chinese characters
 
-请直接输出关键词列表。
+Examples of good keywords: MicroLED, Display Technology, Automotive Lighting, Data Center, High Brightness, Low Power, Long Lifespan, LED Chip, UV LED, Smart Lighting
+
+Please output the keyword list directly.
 `;
 
   const result = await callQwen(prompt);
-  return result.split(/[,，、]/).map(k => k.trim()).filter(k => k.length > 0);
+  return result.split(/[,，、]/).map(k => k.trim()).filter(k => k.length > 0 && !/[\u4e00-\u9fa5]/.test(k));
 }
 
 // 生成摘要
@@ -185,7 +189,7 @@ ${zhContent.substring(0, 300)}
     }
   }
   
-  // 4. 提取关键词
+  // 4. 提取英文关键词（LED行业术语通用英文）
   const keywords = await extractKeywords(zhContent);
   console.log('  ✓ Keywords extracted:', keywords);
   
@@ -200,7 +204,7 @@ ${zhContent.substring(0, 300)}
     title,
     excerpt,
     content,
-    tags: keywords,
+    tags: keywords, // 使用英文标签，在所有语言版本下通用
     category: article.category,
     seo,
   };

@@ -42,12 +42,13 @@ export async function runNewsAutomation(): Promise<void> {
     }
 
     // 5. 构建 sourceMap
-    const sourceMap = new Map<string, { url: string; name: string }>();
+    const sourceMap = new Map<string, { url: string; name: string; imageUrl?: string }>();
     articlesToProcess.forEach((raw, index) => {
       if (processedArticles[index]) {
         sourceMap.set(processedArticles[index].title.zh, {
           url: raw.link,
           name: raw.source,
+          imageUrl: raw.imageUrl,
         });
       }
     });

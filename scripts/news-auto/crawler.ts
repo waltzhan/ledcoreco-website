@@ -15,6 +15,7 @@ export interface RawArticle {
   source: string;
   category: string;
   language: string;
+  imageUrl?: string; // 封面图片URL
 }
 
 // 从 RSS 源抓取
@@ -29,16 +30,34 @@ async function fetchFromRSS(source: NewsSource): Promise<RawArticle[]> {
 
     const feed = await rssParser.parseURL(source.rss, feedOptions as any);
 
-    return feed.items.slice(0, 5).map(item => ({
-      title: item.title || '',
-      link: item.link || '',
-      content: item['content:encoded'] || item.content || item.summary || '',
-      summary: item.summary || '',
-      publishDate: item.pubDate || new Date().toISOString(),
-      source: source.name,
-      category: source.category,
-      language: source.language,
-    }));
+    return feed.items.slice(0, 5).map(item => {
+      // 尝试从 enclosure 或 content 中提取图片
+      let imageUrl = '';
+      if (item.enclosure?.url && item.enclosure.type?.startsWith('image/')) {
+        imageUrl = item.enclosure.url;
+      } else if (item['media:content']?.$.url) {
+        imageUrl = item['media:content'].$.url;
+      } else {
+        // 从 content 中提取第一张图片
+        const content = item['content:encoded'] || item.content || '';
+        const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (imgMatch) {
+          imageUrl = imgMatch[1];
+        }
+      }
+      
+      return {
+        title: item.title || '',
+        link: item.link || '',
+        content: item['content:encoded'] || item.content || item.summary || '',
+        summary: item.summary || '',
+        publishDate: item.pubDate || new Date().toISOString(),
+        source: source.name,
+        category: source.category,
+        language: source.language,
+        imageUrl,
+      };
+    });
   } catch (error) {
     console.error(`RSS fetch error for ${source.name}:`, error);
     return [];
@@ -65,6 +84,19 @@ async function fetchFromWeb(source: NewsSource): Promise<RawArticle[]> {
       const title = $(elem).find('h2, h3, .title, a').first().text().trim();
       const link = $(elem).find('a').first().attr('href') || '';
       const summary = $(elem).find('.summary, .desc, p').first().text().trim();
+      
+      // 尝试提取图片
+      let imageUrl = '';
+      const imgElem = $(elem).find('img').first();
+      if (imgElem.length) {
+        imageUrl = imgElem.attr('src') || imgElem.attr('data-src') || '';
+        // 处理相对路径
+        if (imageUrl && !imageUrl.startsWith('http')) {
+          imageUrl = imageUrl.startsWith('/') 
+            ? `${source.url}${imageUrl}` 
+            : `${source.url}/${imageUrl}`;
+        }
+      }
 
       if (title && link) {
         articles.push({
@@ -76,6 +108,7 @@ async function fetchFromWeb(source: NewsSource): Promise<RawArticle[]> {
           source: source.name,
           category: source.category,
           language: source.language,
+          imageUrl,
         });
       }
     });
