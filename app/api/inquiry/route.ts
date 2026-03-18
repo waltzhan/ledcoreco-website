@@ -16,6 +16,15 @@ const productLabels: Record<string, Record<string, string>> = {
   'other': { en: 'Other', zh: '其他', id: 'Lainnya', th: 'อื่นๆ', vi: 'Khác', ar: 'أخرى' },
 };
 
+// GET 方法用于测试 API 是否正常工作
+export async function GET() {
+  return NextResponse.json({ 
+    status: 'API is working',
+    inquiryEmail: INQUIRY_EMAIL,
+    fromEmail: FROM_EMAIL,
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
