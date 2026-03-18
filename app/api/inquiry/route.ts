@@ -67,7 +67,17 @@ export async function POST(request: NextRequest) {
     };
     const quantityLabel = quantityLabels[quantity]?.[locale] || quantityLabels[quantity]?.en || quantity || '-';
 
+    // 调试日志
+    console.log('SMTP Config:', {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      user: process.env.SMTP_USER,
+      hasPass: !!process.env.SMTP_PASS,
+      inquiryEmail: INQUIRY_EMAIL,
+    });
+
     // 发送邮件给销售团队
+    console.log('Sending email to sales team:', INQUIRY_EMAIL);
     await sendEmail({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: INQUIRY_EMAIL,
@@ -116,6 +126,7 @@ export async function POST(request: NextRequest) {
     });
 
     // 发送确认邮件给用户
+    console.log('Sending confirmation email to user:', email);
     await sendEmail({
       from: `GOPRO LED <${FROM_EMAIL}>`,
       to: email,
