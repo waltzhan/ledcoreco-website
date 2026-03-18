@@ -42,9 +42,11 @@ interface EmailOptions {
  * 发送邮件
  */
 export async function sendEmail(options: EmailOptions): Promise<void> {
+  console.log('SMTP: Starting email send to', options.to);
   const transporter = createTransporter();
   
   try {
+    console.log('SMTP: Sending mail via nodemailer...');
     await transporter.sendMail({
       from: options.from,
       to: options.to,
