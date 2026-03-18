@@ -19,9 +19,10 @@ const productLabels: Record<string, Record<string, string>> = {
 // GET 方法用于测试 API 是否正常工作
 export async function GET() {
   return NextResponse.json({ 
-    status: 'API is working',
+    status: 'API is working - SMTP VERSION v2',
     inquiryEmail: INQUIRY_EMAIL,
     fromEmail: FROM_EMAIL,
+    timestamp: new Date().toISOString(),
   });
 }
 
