@@ -23,6 +23,7 @@ export async function getTodayArticleCount(): Promise<number> {
  * 检查当前是否在发布时间段内
  * Vercel Cron 运行在 UTC 时间，需要转换为北京时间（UTC+8）
  * 
+ * ⚠️ Hobby 套餐 Cron 有 ±1 小时浮动误差，时间窗口设为 ±90 分钟
  * 本地测试时设置 NEWS_BYPASS_TIME_CHECK=true 可绕过时间检查
  */
 export function isInPublishWindow(): boolean {
@@ -38,8 +39,8 @@ export function isInPublishWindow(): boolean {
   const beijingMinute = now.getUTCMinutes();
   const currentTime = `${String(beijingHour).padStart(2, '0')}:${String(beijingMinute).padStart(2, '0')}`;
 
-  // 允许前后5分钟的误差窗口（Cron 执行可能有延迟）
-  const timeWindowMinutes = 5;
+  // Vercel Hobby 套餐 Cron 有 ±1 小时浮动误差，窗口设为 ±90 分钟
+  const timeWindowMinutes = 90;
 
   for (const publishTime of NEWS_CONFIG.publish.publishTimes) {
     const [hour, minute] = publishTime.split(':').map(Number);
