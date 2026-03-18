@@ -24,7 +24,6 @@
     "nodemailer": "^8.0.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "resend": "^6.9.3",
     "rss-parser": "^3.13.0",
     "sanity": "^5.13.0"
   },
