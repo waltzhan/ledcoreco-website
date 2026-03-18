@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Build timestamp: 2025-03-18 - Force rebuild for SMTP update
 const nextConfig = {
   images: {
     // 性能优化：支持现代图片格式，提升 Core Web Vitals LCP 指标
